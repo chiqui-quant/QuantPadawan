@@ -38,8 +38,12 @@ elif dist_name == 'chi-square':
 Goal: create a Jarque-Bera normality test
 '''
 
+x_skew = skew(x)
+x_kurtosis = kurtosis(x)
+
+
 # plot histogram
 plt.figure()
 plt.hist(x,bins=100) # bins is the number of segments
-plt.title(x_str)
+plt.title(x_description)
 plt.show()
