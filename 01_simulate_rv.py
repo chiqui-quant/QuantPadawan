@@ -39,7 +39,8 @@ Goal: create a Jarque-Bera normality test
 '''
 
 x_skew = skew(x)
-x_kurtosis = kurtosis(x)
+x_kurtosis = kurtosis(x) # excess kurtosis
+x_jb_stat = nb_sims/6*(x_skew**2 + 1/4*x_kurtosis**2)
 
 
 # plot histogram
