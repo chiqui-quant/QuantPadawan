@@ -14,8 +14,8 @@ import matplotlib.pyplot as plt
 from scipy.stats import skew, kurtosis, chi2
 
 nb_sims = 10**6
-df = 2
-dist_name = 'chi-square' # student normal exponential uniform chi-square
+df = 5
+dist_name = 'normal' # student normal exponential uniform chi-square
 dist_type = 'simulated RV' # real custom
 
 if dist_name == 'normal':
@@ -38,9 +38,20 @@ elif dist_name == 'chi-square':
 Goal: create a Jarque-Bera normality test
 '''
 
+x_mean = np.mean(x)
+x_std = np.std(x)
 x_skew = skew(x)
 x_kurtosis = kurtosis(x) # excess kurtosis
 x_jb_stat = nb_sims/6*(x_skew**2 + 1/4*x_kurtosis**2)
+x_p_value = 1 - chi2.cdf(x_jb_stat, df=2) 
+x_is_normal = (x_p_value > 0.05) # equivalently jb < 6
+
+
+print('skewness is ' + str(x_skew))
+print('kurtosis is ' + str(x_kurtosis))
+print('JB statistic is ' + str(x_jb_stat))
+print('p-value is ' + str(x_p_value))
+print('is normal ' + str(x_is_normal))
 
 
 # plot histogram
