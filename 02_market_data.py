@@ -7,10 +7,12 @@ import matplotlib.pyplot as plt
 from scipy.stats import skew, kurtosis, chi2
 
 # Get market data (remember to modify path to match your own directory)
-ric = 'BBVA.MC'
-path = 'C:\\Users\\Chiqui\\Desktop\\Python Projects\\QuantPadawan\\data\\' + ric + '.csv'
-raw_data = pd.read_csv(path)
+directory = 'C:\\Users\\Chiqui\\Desktop\\Python Projects\\QuantPadawan\\data\\'
 
+# Inputs
+ric = 'BBVA.MC'
+path = directory + ric + '.csv'
+raw_data = pd.read_csv(path)
 
 
 
