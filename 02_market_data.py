@@ -8,7 +8,7 @@ from scipy.stats import skew, kurtosis, chi2
 
 # Get market data (remember to modify path to match your own directory)
 ric = 'BBVA.MC'
-path = 'C:\Users\Chiqui\Desktop\Python Projects\QuantPadawan' + ric + '.csv'
+path = 'C:\\Users\\Chiqui\\Desktop\\Python Projects\\QuantPadawan\\data\\' + ric + '.csv'
 raw_data = pd.read_csv(path)
 
 
