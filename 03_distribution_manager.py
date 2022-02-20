@@ -19,6 +19,6 @@ inputs = {
 
 dm = file_classes.distribution_manager(inputs)
 dm.load_timeseries() # polymorphism
-dm.plot_histogram()
 dm.compute()
+dm.plot_histogram()
 print(dm)

@@ -72,6 +72,7 @@ class distribution_manager():
         plt.figure()
         plt.hist(self.vec_returns,bins=100) # bins is the number of segments
         plt.title(self.description)
+        plt.xlabel(self.plot_str())
         plt.show()
 
     def compute(self):
