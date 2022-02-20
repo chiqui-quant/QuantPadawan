@@ -20,5 +20,6 @@ inputs = {
 dm = file_classes.distribution_manager(inputs)
 dm.load_timeseries() # polymorphism
 dm.compute()
+dm.percentile(87) # compute any percentile 
 dm.plot_histogram()
 print(dm)

@@ -20,6 +20,8 @@ class distribution_manager():
         self.jb_stat = None
         self.p_value = None
         self.is_normal = None 
+        self.var_95 = None
+        self.cvar_95 = None
 
     """ Note: these are all the attributes we have access to, even if the file could run without them
     it is a good convention to report them so we know it immediately (eg. run dm.mean or any other metric)
@@ -95,6 +97,11 @@ class distribution_manager():
         self.jb_stat = self.nb_rows/6*(self.skew**2 + 1/4*self.kurtosis**2)
         self.p_value = 1 - chi2.cdf(self.jb_stat, df=2) 
         self.is_normal = (self.p_value > 0.05) # equivalently jb < 6
+        self.var_95 = np.percentile(self.vec_returns,5)
+        self.cvar_95 = np.mean(self.vec_returns[self.vec_returns <= self.var_95]) # mean of returns on the left of var_95
+        self.percentile_25 = self.percentile(25) # alternatively np.percentile(self.vec_returns,25)
+        self.median = np.median(self.vec_returns)
+        self.percentile_75 = self.percentile(75)
 
     def plot_str(self):
         nb_decimals = 4
@@ -104,8 +111,17 @@ class distribution_manager():
             + ' | kurtosis ' + str(np.round(self.kurtosis, nb_decimals)) + '\n'\
             + 'Jarque Bera  ' + str(np.round(self.jb_stat, nb_decimals))\
             + ' | p-value ' + str(np.round(self.p_value, nb_decimals))\
-            + ' | is normal ' + str(self.is_normal)
+            + ' | is normal ' + str(self.is_normal) + '\n'\
+            + 'VaR 95% ' + str(np.round(self.var_95, nb_decimals))\
+            + ' | CVaR 95% ' + str(np.round(self.cvar_95, nb_decimals)) + '\n'\
+            + 'percentile 25% ' + str(np.round(self.percentile_25, nb_decimals))\
+            + ' | median ' + str(np.round(self.median, nb_decimals))\
+            + ' | percentile 75% ' + str(np.round(self.percentile_75, nb_decimals))
         return plot_str
+
+    def percentile(self, pct):
+        percentile = np.percentile(self.vec_returns,pct)
+        return percentile
 
 
 
