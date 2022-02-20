@@ -13,6 +13,17 @@ class distribution_manager():
         self.data_table = None
         self.description = None
         self.nb_rows = None
+        self.mean = None
+        self.std = None
+        self.skew = None
+        self.kurtosis = None # excess kurtosis
+        self.jb_stat = None
+        self.p_value = None
+        self.is_normal = None 
+
+    """ Note: these are all the attributes we have access to, even if the file could run without them
+    it is a good convention to report them so we know it immediately (eg. run dm.mean or any other metric)
+    """
 
     def __str__(self):
         str_self = self.description + ' | size ' + str(self.nb_rows) + '\n' + self.plot_str()
