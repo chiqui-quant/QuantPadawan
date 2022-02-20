@@ -1,3 +1,4 @@
+from cmath import sqrt
 import pandas as pd
 import numpy as np
 import matplotlib as mpl 
@@ -20,8 +21,12 @@ class distribution_manager():
         self.jb_stat = None
         self.p_value = None
         self.is_normal = None 
+        self.sharpe = None
         self.var_95 = None
         self.cvar_95 = None
+        self.percentile_25 = None
+        self.median = None
+        self.percentile_75 = None
 
     """ Note: these are all the attributes we have access to, even if the file could run without them
     it is a good convention to report them so we know it immediately (eg. run dm.mean or any other metric)
@@ -97,6 +102,7 @@ class distribution_manager():
         self.jb_stat = self.nb_rows/6*(self.skew**2 + 1/4*self.kurtosis**2)
         self.p_value = 1 - chi2.cdf(self.jb_stat, df=2) 
         self.is_normal = (self.p_value > 0.05) # equivalently jb < 6
+        self.sharpe = self.mean / self.std * np.sqrt(252) # annualized Sharpe ratio under the hypothesis that standard deviation grows as sqrt(time) increases
         self.var_95 = np.percentile(self.vec_returns,5)
         self.cvar_95 = np.mean(self.vec_returns[self.vec_returns <= self.var_95]) # mean of returns on the left of var_95
         self.percentile_25 = self.percentile(25) # alternatively np.percentile(self.vec_returns,25)
@@ -112,7 +118,7 @@ class distribution_manager():
             + 'Jarque Bera  ' + str(np.round(self.jb_stat, nb_decimals))\
             + ' | p-value ' + str(np.round(self.p_value, nb_decimals))\
             + ' | is normal ' + str(self.is_normal) + '\n'\
-            + 'VaR 95% ' + str(np.round(self.var_95, nb_decimals))\
+            + 'Sharpe annual ' + str(np.round(self.sharpe, nb_decimals))  + ' | VaR 95% ' + str(np.round(self.var_95, nb_decimals))\
             + ' | CVaR 95% ' + str(np.round(self.cvar_95, nb_decimals)) + '\n'\
             + 'percentile 25% ' + str(np.round(self.percentile_25, nb_decimals))\
             + ' | median ' + str(np.round(self.median, nb_decimals))\
@@ -120,7 +126,7 @@ class distribution_manager():
         return plot_str
 
     def percentile(self, pct):
-        percentile = np.percentile(self.vec_returns,pct)
+        percentile = np.percentile(self.vec_returns, pct)
         return percentile
 
 
