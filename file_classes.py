@@ -14,6 +14,10 @@ class distribution_manager():
         self.description = None
         self.nb_rows = None
 
+    def __str__(self):
+        str_self = self.description + ' | size ' + str(self.nb_rows) + '\n' + self.plot_str()
+        return str_self
+
     def load_timeseries(self):
         
         data_type = self.inputs['data_type']
@@ -69,6 +73,27 @@ class distribution_manager():
         plt.hist(self.vec_returns,bins=100) # bins is the number of segments
         plt.title(self.description)
         plt.show()
+
+    def compute(self):
+        
+        self.mean = np.mean(self.vec_returns)
+        self.std = np.std(self.vec_returns)
+        self.skew = skew(self.vec_returns)
+        self.kurtosis = kurtosis(self.vec_returns) # excess kurtosis
+        self.jb_stat = self.nb_rows/6*(self.skew**2 + 1/4*self.kurtosis**2)
+        self.p_value = 1 - chi2.cdf(self.jb_stat, df=2) 
+        self.is_normal = (self.p_value > 0.05) # equivalently jb < 6
+
+    def plot_str(self):
+        nb_decimals = 4
+        plot_str = 'mean ' + str(np.round(self.mean, nb_decimals))\
+            + ' | std dev ' + str(np.round(self.std, nb_decimals))\
+            + ' | skewness ' + str(np.round(self.skew, nb_decimals))\
+            + ' | kurtosis ' + str(np.round(self.kurtosis, nb_decimals)) + '\n'\
+            + 'Jarque Bera  ' + str(np.round(self.jb_stat, nb_decimals))\
+            + ' | p-value ' + str(np.round(self.p_value, nb_decimals))\
+            + ' | is normal ' + str(self.is_normal)
+        return plot_str
 
 
 
