@@ -34,6 +34,13 @@ x = t['return_close'].values
 x_description = 'market data ' + ric
 nb_rows = len(x)
 
+# Plot timeseries of price
+plt.figure()
+plt.plot(t['date'],t['close'])
+plt.title('Time series real prices ' + ric)
+plt.xlabel('Time')
+plt.ylabel('Price')
+plt.show()
 
 '''
 Goal: create a Jarque-Bera normality test
@@ -58,7 +65,7 @@ print('p-value is ' + str(x_p_value))
 print('is normal ' + str(x_is_normal))
 
 
-# plot histogram
+# Plot histogram
 plt.figure()
 plt.hist(x,bins=100) # bins is the number of segments
 plt.title(x_description)
