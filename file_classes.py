@@ -38,12 +38,12 @@ class distribution_manager():
 
     def load_timeseries(self):
         
-        data_type = self.inputs['data_type']
-        
+        data_type = self.inputs.data_type
+
         if data_type == 'simulation':
-            nb_sims = self.inputs['nb_sims']
-            dist_name = self.inputs['variable_name']
-            degrees_freedom = self.inputs['degrees_freedom']
+            nb_sims = self.inputs.nb_sims
+            dist_name = self.inputs.variable_name
+            degrees_freedom = self.inputs.degrees_freedom
             if dist_name == 'normal':
                 x = np.random.standard_normal(nb_sims)
                 x_description = data_type + ' ' + dist_name
@@ -68,7 +68,7 @@ class distribution_manager():
         elif data_type == 'real':
             directory = 'C:\\Users\\Chiqui\\Desktop\\Python Projects\\QuantPadawan\\data\\'
 
-            ric = self.inputs['variable_name']
+            ric = self.inputs.variable_name
             path = directory + ric + '.csv'
             raw_data = pd.read_csv(path)
 
@@ -128,6 +128,14 @@ class distribution_manager():
     def percentile(self, pct):
         percentile = np.percentile(self.vec_returns, pct)
         return percentile
+
+class distribution_input():
+    
+    def __init__(self):
+        self.data_type = None # simulation real custom
+        self.variable_name = None # normal student exponential chi-square uniform 'TICKER'
+        self.degrees_freedom = None # only used in simulation + student and chi-square
+        self.nb_sims = None # only in simulation
 
 
 
