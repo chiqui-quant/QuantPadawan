@@ -25,5 +25,9 @@ capm.compute()
 beta_portfolio = capm.beta
 beta_portfolio_usd = beta_portfolio * delta_portfolio # mln USD
 
-
-
+# Print input
+print('------')
+print('Input portfolio:')
+print('Delta mlnUSD for ' + security + ' is ' + str(delta_portfolio))
+print('Beta for ' + security + ' vs ' + benchmark + ' is ' + str(beta_portfolio))
+print('Beta mlnUSD for ' + security + ' vs ' + benchmark + ' is ' +  str(beta_portfolio_usd))
