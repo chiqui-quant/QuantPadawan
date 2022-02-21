@@ -15,7 +15,7 @@ importlib.reload(file_functions)
 
 # Inputs
 benchmark = '^STOXX50E' # variable x
-security = 'BBVA.MC' # variable y
+security = 'REP.MC' # variable y
 
 # Working with classes
 capm = file_classes.capm_manager(benchmark, security)
