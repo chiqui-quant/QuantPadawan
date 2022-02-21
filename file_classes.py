@@ -152,8 +152,8 @@ class capm_manager():
         self.security = security
         self.nb_decimals = 4
         self.data_table = None
-        self.slope = None
-        self.intercept = None
+        self.alpha = None
+        self.beta = None
         self.p_value = None
         self.r_value = None
         self.std_err = None
@@ -165,8 +165,8 @@ class capm_manager():
     def plot_str(self):
         str_self = 'Linear regression | security ' + self.security\
             + ' | benchmark ' + self.benchmark + '\n'\
-            + 'alpha (intercept) ' + str(self.intercept)\
-            + ' | beta (slope) ' + str(self.slope) + '\n'\
+            + 'alpha (intercept) ' + str(self.alpha)\
+            + ' | beta (slope) ' + str(self.beta) + '\n'\
             + 'p_value ' + str(self.p_value)\
             + ' | null hypothesis ' + str(self.null_hypothesis) + '\n'\
             + 'r-value (corr) ' + str(self.r_value)\
@@ -182,8 +182,8 @@ class capm_manager():
         x = self.data_table['return_x'].values
         y = self.data_table['return_y'].values
         slope, intercept, r_value, p_value, std_err = linregress(x,y)
-        self.slope = np.round(slope, self.nb_decimals)
-        self.intercept = np.round(intercept, self.nb_decimals)
+        self.alpha = np.round(intercept, self.nb_decimals)
+        self.beta = np.round(slope, self.nb_decimals)
         self.p_value = np.round(p_value, self.nb_decimals)
         self.null_hypothesis = p_value > 0.05 # if p_value < 0.05 reject the null hypothesis (that is, that the linear regression is bad, eg. ^STOXX50E with EURUSD=X)
         self.r_value = np.round(r_value, self.nb_decimals) # correlation coefficient
