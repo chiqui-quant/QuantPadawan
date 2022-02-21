@@ -7,6 +7,12 @@ import importlib
 import matplotlib.pyplot as plt
 from scipy.stats import skew, kurtosis, chi2
 
+# Import our own files and reload
+import file_classes
+importlib.reload(file_classes)
+import file_functions
+importlib.reload(file_functions)
+
 class distribution_manager():
     
     def __init__(self, inputs):
@@ -66,25 +72,27 @@ class distribution_manager():
 
 
         elif data_type == 'real':
-            directory = 'C:\\Users\\Chiqui\\Desktop\\Python Projects\\QuantPadawan\\data\\'
+            # directory = 'C:\\Users\\Chiqui\\Desktop\\Python Projects\\QuantPadawan\\data\\'
+
+            # ric = self.inputs.variable_name
+            # path = directory + ric + '.csv'
+            # raw_data = pd.read_csv(path)
+            # t = pd.DataFrame() # t (for table) with no elements
+            # t['date'] = pd.to_datetime(raw_data['Date'], dayfirst=True) # if dayfirst is omitted we have American dates
+            # t['close'] = raw_data['Close']
+            # t.sort_values(by='date',ascending=True)
+            # t['close_previous'] = t['close'].shift(1) # shift moves values below by the amount you indicate
+            # t['return_close'] = t['close']/t['close_previous'] - 1
+            # t = t.dropna()
+            # t = t.reset_index(drop=True)
+            
+            # self.data_table = t
+            # self.description = 'market data ' + ric
+            # self.nb_rows = t.shape[0]
+            # self.vec_returns = t['return_close'].values
 
             ric = self.inputs.variable_name
-            path = directory + ric + '.csv'
-            raw_data = pd.read_csv(path)
-
-            t = pd.DataFrame() # t (for table) with no elements
-            t['date'] = pd.to_datetime(raw_data['Date'], dayfirst=True) # if dayfirst is omitted we have American dates
-            t['close'] = raw_data['Close']
-            t.sort_values(by='date',ascending=True)
-            t['close_previous'] = t['close'].shift(1) # shift moves values below by the amount you indicate
-            t['return_close'] = t['close']/t['close_previous'] - 1
-            t = t.dropna()
-            t = t.reset_index(drop=True)
-            
-            self.data_table = t
-            self.description = 'market data ' + ric
-            self.nb_rows = t.shape[0]
-            self.vec_returns = t['return_close'].values
+            t = file_functions.load_timeseries(ric)
 
     def plot_histogram(self):
         plt.figure()
