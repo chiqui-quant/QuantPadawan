@@ -35,12 +35,14 @@ importlib.reload(file_classes)
 # input_nb_sims =  None # for simulated random variables
 
 # This is more 'robust' because we have defined inputs_class and make changes without breaking the rest of the code
-inputs_class = file_classes.distribution_input()
-inputs_class.data_type = 'real'
-inputs_class.variable_name = 'BBVA.MC'
+inputs = file_classes.distribution_input()
+inputs.data_type = 'real'
+inputs.variable_name = 'BBVA.MC'
+inputs.degrees_freedom = None
+inputs.nb_sims = None
 
-# Note: clicking on inputs_class leads to the variables we have access (this is why this approach might be preferred)
-dm = file_classes.distribution_manager(inputs_class) #initialize constructor
+# Note: ctrl+clicking on (inputs) leads to the variables we have access (this is why this approach might be preferred)
+dm = file_classes.distribution_manager(inputs) #initialize constructor
 dm.load_timeseries() # polymorphism: get the timeseries
 dm.compute() # compute returns and all different risk metrics
 dm.plot_histogram() # plot histogram
