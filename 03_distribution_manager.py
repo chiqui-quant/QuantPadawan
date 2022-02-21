@@ -34,11 +34,12 @@ importlib.reload(file_classes)
 # input_degrees_freedom = None # only in student and chi-square
 # input_nb_sims =  None # for simulated random variables
 
-# This is more 'solid' because we have defined inputs_class and make changes without breaking the rest of the code
+# This is more 'robust' because we have defined inputs_class and make changes without breaking the rest of the code
 inputs_class = file_classes.distribution_input()
 inputs_class.data_type = 'real'
 inputs_class.variable_name = 'BBVA.MC'
 
+# Note: clicking on inputs_class leads to the variables we have access (this is why this approach might be preferred)
 dm = file_classes.distribution_manager(inputs_class) #initialize constructor
 dm.load_timeseries() # polymorphism: get the timeseries
 dm.compute() # compute returns and all different risk metrics
