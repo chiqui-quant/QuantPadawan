@@ -155,7 +155,8 @@ class capm_manager():
         self.alpha = None
         self.beta = None
         self.p_value = None
-        self.r_value = None
+        self.correlation = None
+        self.r_squared = None
         self.std_err = None
         self.predictor_linreg = None
 
@@ -169,7 +170,7 @@ class capm_manager():
             + ' | beta (slope) ' + str(self.beta) + '\n'\
             + 'p_value ' + str(self.p_value)\
             + ' | null hypothesis ' + str(self.null_hypothesis) + '\n'\
-            + 'r-value (corr) ' + str(self.r_value)\
+            + 'correl (r-value) ' + str(self.correlation)\
             + ' | r-squared ' + str(self.r_squared)
         return str_self
 
@@ -186,7 +187,7 @@ class capm_manager():
         self.beta = np.round(slope, self.nb_decimals)
         self.p_value = np.round(p_value, self.nb_decimals)
         self.null_hypothesis = p_value > 0.05 # if p_value < 0.05 reject the null hypothesis (that is, that the linear regression is bad, eg. ^STOXX50E with EURUSD=X)
-        self.r_value = np.round(r_value, self.nb_decimals) # correlation coefficient
+        self.correlation = np.round(r_value, self.nb_decimals) # correlation coefficient
         self.r_squared = np.round(r_value**2, self.nb_decimals) #pct of variance of y explained by x
         self.predictor_linreg = intercept + slope*x
 
