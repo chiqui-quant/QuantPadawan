@@ -16,7 +16,7 @@ importlib.reload(file_functions)
 class distribution_manager():
     
     def __init__(self, inputs):
-        self.inputs = inputs
+        self.inputs = inputs # distribution inputs
         self.data_table = None
         self.description = None
         self.nb_rows = None
@@ -218,12 +218,100 @@ class capm_manager():
         plt.grid()
         plt.show()   
 
-
-
-
-
-
+class hedge_manager():
     
+    def __init__(self, inputs):
+        self.inputs = inputs # hedge inputs
+        self.benchmark = inputs.benchmark # the market in CAPM (in general ^STOXX50E)
+        self.security = inputs.security # portfolio to hedge
+        self.hedge_securities = inputs.hedge_securities # hedge universe
+        self.nb_hedges = len(self.hedge_securities)
+        self.delta_portfolio = inputs.delta_portfolio
+        self.beta_portfolio = None
+        self.beta_portfolio_usd = None
+        self.betas = None
+        self.optimal_hedge = None 
+        self.hedge_delta = None
+        self.hedge_beta_usd = None
+
+
+
+
+    def load_betas(self):
+        benchmark = self.benchmark
+        security = self.security
+        hedge_securities = self.hedge_securities
+        delta_portfolio = self.delta_portfolio
+        # Compute betas for the portfolio
+        capm = file_classes.capm_manager(benchmark, security)
+        capm.load_timeseries()
+        capm.compute()
+        beta_portfolio = capm.beta
+        beta_portfolio_usd = beta_portfolio * delta_portfolio # mln USD
+        # Print input
+        print('------')
+        print('Input portfolio:')
+        print('Delta mlnUSD for ' + security + ' is ' + str(delta_portfolio))
+        print('Beta for ' + security + ' vs ' + benchmark + ' is ' + str(beta_portfolio))
+        print('Beta mlnUSD for ' + security + ' vs ' + benchmark + ' is ' +  str(beta_portfolio_usd))
+        # Compute betas for the hedges (construct an array of zeros and add the computed betas)
+        shape = [len(hedge_securities),1]
+        betas = np.zeros(shape)
+        counter = 0
+        print('------')
+        print('Input hedges:')
+        for hedge_ric in hedge_securities: 
+            capm = file_classes.capm_manager(benchmark, hedge_ric)
+            capm.load_timeseries()
+            capm.compute()
+            beta = capm.beta
+            print('Beta for hedge[' + str(counter) + '] = ' + hedge_ric + ' vs ' + benchmark + ' is ' + str(beta))
+            betas[counter] = beta
+            counter += 1
+
+        self.beta_portfolio = beta_portfolio
+        self.beta_portfolio_usd = beta_portfolio_usd
+        self.betas = betas
+
+    def compute(self):
+        # Exact solution using matrix algebra
+        shape = [len(self.hedge_securities)]
+        betas = self.betas
+        deltas = np.ones(shape) # vertical vector of ones
+        targets = -np.array([[self.delta_portfolio],[self.beta_portfolio_usd]]) # our targets in order to hedge are -delta and -beta
+        mtx = np.transpose(np.column_stack((deltas,betas))) # stack deltas and betas and take the transpose
+        self.optimal_hedge = np.linalg.inv(mtx).dot(targets) # invert the matrix and multiply by targets
+        self.hedge_delta = np.sum(self.optimal_hedge)
+        self.hedge_beta_usd = np.transpose(betas).dot(self.optimal_hedge).item()
+
+        # Print result
+        print('------')
+        print('Optimization result')
+        print('------')
+        print('Delta: ' + str(self.delta_portfolio))
+        print('Beta USD: ' + str(self.beta_portfolio_usd))
+        print('------')
+        print('Hedge delta: ' + str(self.hedge_delta))
+        print('Hedge beta: ' + str(self.hedge_beta_usd))
+        print('------')
+        print('Betas for the hedge: ')
+        print(betas)
+        print('------')
+        print('Optimal hedge: ')
+        print(self.optimal_hedge)
+        print('------')
+
+
+class hedge_input():
+
+    def __init__(self):
+        self.benchmark = None # the market in CAPM (in general ^STOXX50E)
+        self.security = 'BBVA.MC' # portfolio to hedge
+        self.hedge_securities = ['STOXX50E', '^FCHI'] # hedge universe
+        self.delta_portfolio = 10 # mlnUSD (default 10)
+
+
+            
 
 
 
