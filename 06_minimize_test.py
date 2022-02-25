@@ -7,6 +7,12 @@ import matplotlib.pyplot as plt
 from scipy.stats import skew, kurtosis, chi2, linregress
 from scipy.optimize import minimize
 
+# Import our own files and reload
+import file_classes
+importlib.reload(file_classes)
+import file_functions
+importlib.reload(file_functions)
+
 # # Example 1 (to verify how it works)
 # # Define the function to minimize
 # def cost_function(x):
@@ -21,7 +27,7 @@ from scipy.optimize import minimize
 # print('Optimization result:')
 # print(optimal_result)
 
-# # Example 2 (more general, generating random vectors anc checking solutions)
+# # Example 2 (more general, generating random vectors and checking solutions)
 # # Define the function to minimize
 # def cost_function(x, roots, coeffs):
 #     f = 0

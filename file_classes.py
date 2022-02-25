@@ -6,6 +6,7 @@ import scipy
 import importlib
 import matplotlib.pyplot as plt
 from scipy.stats import skew, kurtosis, chi2, linregress
+from scipy.optimize import minimize
 
 # Import our own files and reload
 import file_classes
@@ -235,9 +236,6 @@ class hedge_manager():
         self.hedge_delta = None
         self.hedge_beta_usd = None
 
-
-
-
     def load_betas(self):
         benchmark = self.benchmark
         security = self.security
@@ -274,33 +272,51 @@ class hedge_manager():
         self.beta_portfolio_usd = beta_portfolio_usd
         self.betas = betas
 
-    def compute(self):
+    def compute(self, regularization=0.0):
+        # Numerical solution
+        dimensions = len(self.hedge_securities)
+        x = np.zeros([dimensions,1])
+        betas = self.betas
+        optimal_result = minimize(fun= file_functions.cost_function_hedge, x0=x, args=(self.delta_portfolio, self.beta_portfolio_usd, self.betas, regularization))
+        self.optimal_hedge = optimal_result.x
+        # Compute the delta and beta of hedge portfolio
+        self.hedge_delta = np.sum(self.optimal_hedge)
+        self.hedge_beta_usd = np.transpose(betas).dot(self.optimal_hedge).item()
+        # Print result
+        self.print_result('numerical')
+
+    def compute_exact(self):
         # Exact solution using matrix algebra
-        shape = [len(self.hedge_securities)]
+        n = len(self.hedge_securities)
+        if n != 2: 
+            print('------')
+            print('Cannot compute exact solution because n = ' + str(n) + ' =/= 2')
+            return
+        shape = [n]
         betas = self.betas
         deltas = np.ones(shape) # vertical vector of ones
         targets = -np.array([[self.delta_portfolio],[self.beta_portfolio_usd]]) # our targets in order to hedge are -delta and -beta
         mtx = np.transpose(np.column_stack((deltas,betas))) # stack deltas and betas and take the transpose
         self.optimal_hedge = np.linalg.inv(mtx).dot(targets) # invert the matrix and multiply by targets
+        # Compute the delta and beta of hedge portfolio
         self.hedge_delta = np.sum(self.optimal_hedge)
         self.hedge_beta_usd = np.transpose(betas).dot(self.optimal_hedge).item()
+        # Print result
+        self.print_result('exact')
 
+    def print_result(self, algo_type):
         # Print result
         print('------')
-        print('Optimization result')
+        print('Optimization result - ' + algo_type + ' solution')
         print('------')
-        print('Delta: ' + str(self.delta_portfolio))
-        print('Beta USD: ' + str(self.beta_portfolio_usd))
+        print('Delta portfolio: ' + str(self.delta_portfolio))
+        print('Beta portfolio USD: ' + str(self.beta_portfolio_usd))
         print('------')
-        print('Hedge delta: ' + str(self.hedge_delta))
-        print('Hedge beta: ' + str(self.hedge_beta_usd))
-        print('------')
-        print('Betas for the hedge: ')
-        print(betas)
+        print('Delta hedge: ' + str(self.hedge_delta))
+        print('Beta hedge USD: ' + str(self.hedge_beta_usd))
         print('------')
         print('Optimal hedge: ')
         print(self.optimal_hedge)
-        print('------')
 
 
 class hedge_input():
