@@ -77,7 +77,7 @@ for i in range(size):
         vec_returns[i] = temp_mean
         # Volatilities
         temp_volatility = np.round(np.sqrt(scale)*np.std(temp_ret), nb_decimals) # volatility grows with the square root of time
-        vec_volatilities = temp_volatility
+        vec_volatilities[i] = temp_volatility
 
 """Note: using range we get n-1 (eg. range 5, we get 1 to 4) this is why we use range(i+1) for j
 because once we have i, we want j to be the same number as i. Eg. i(row)=3 and j(column)=3. If we
@@ -86,6 +86,58 @@ matrix is symmetric (useless additional computation)"""
 # for i in range(5): 
 #     print(i)
 
+# Now we can compute the eigenvalues and eigenvectors in 2 ways
+# Compute eigenvalues and eigenvectors 
+# eigenvalues, eigenvectors = LA.eig(mtx_covar)
+# Compute eigenvalues and eigenvectors for symmetric matrices
+eigenvalues, eigenvectors = LA.eigh(mtx_covar)
+# Note: in the second way (for symmetric matrices) the eigenvalues and eigenvectors will be normalized (ordered), which is what we want
+# Note: the vertical eigenvector of index 0 is the minimum variance portfolio (it is the eigenvector associated with the lowest eigenvalue)
+
+print('------')
+print('Securities:')
+print(rics)
+print('------')
+print('Returns (annualized):')
+print(vec_returns)
+print('------')
+print('Volatilities (annualized):')
+print(vec_volatilities)
+print('------')
+print('Variance-covariance matrix (annualized):')
+print(mtx_covar)
+print('------')
+print('Correlation matrix (annualized):')
+print(mtx_correl)
+print('------')
+print('Eigenvalues:')
+print(eigenvalues)
+print('------')
+print('Eigenvectors:')
+print(eigenvectors)
+
+# Min-variance portfolio
+print('------')
+print('Min-variance portfolio:')
+print('notional (mlnUSD) = ' + str(notional))
+variance_explained = eigenvalues[0] / sum(abs(eigenvalues)) # R^2 of the variance explained by the eigenvector (abs = absolute value)
+eigenvector = eigenvectors[:,0] # first column is the min-variance eigenvector
+port_min_var = notional * eigenvector / sum(abs(eigenvector))
+delta_min_var = sum(port_min_var)
+print('delta (mlnUSD) = ' + str(delta_min_var))
+print('variance explained = ' + str(variance_explained))
+
+# PCA (max-variance) portfolio
+print('------')
+print('PCA portfolio (max-variance):')
+print('notional (mlnUSD) = ' + str(notional))
+variance_explained = eigenvalues[-1] / sum(abs(eigenvalues)) # R^2 of the variance explained by the eigenvector
+eigenvector = eigenvectors[:,-1] # first column is the min-variance eigenvector
+port_pca = notional * eigenvector / sum(abs(eigenvector))
+delta_pca = sum(port_pca)
+print('delta (mlnUSD) = ' + str(delta_pca))
+print('variance explained = ' + str(variance_explained))
+# Note: the only difference for the max-variance portfolio is that we take the last column
 
 
 
