@@ -1,4 +1,3 @@
-from optparse import Values
 import pandas as pd
 import numpy as np
 import matplotlib as mpl 
@@ -15,8 +14,9 @@ importlib.reload(file_classes)
 import file_functions
 importlib.reload(file_functions)
 
+# Note: small changes in inputs can give rise to large changes in the portfolio (variance-covariance matrix instability)
 nb_decimals = 6 # 3 4 5 6
-scale = 1 # 1 252(for annualized covariance assuming brownian motion, so that variance increases with sqrt of time)
+scale = 252 # 1 252(for annualized covariance assuming brownian motion, so that variance increases with sqrt of time)
 notional = 10 # mln USD
 rics = ['BBVA.MC', 'AAL.L', 'ANTO.L', 'EONGn.DE', 'RIO.L']
 

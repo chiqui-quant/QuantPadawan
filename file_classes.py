@@ -1,4 +1,3 @@
-from cmath import sqrt
 import pandas as pd
 import numpy as np
 import matplotlib as mpl 
@@ -7,12 +6,14 @@ import importlib
 import matplotlib.pyplot as plt
 from scipy.stats import skew, kurtosis, chi2, linregress
 from scipy.optimize import minimize
+from numpy import linalg as LA
 
 # Import our own files and reload
 import file_classes
 importlib.reload(file_classes)
 import file_functions
 importlib.reload(file_functions)
+
 
 class distribution_manager():
     
@@ -327,8 +328,138 @@ class hedge_input():
         self.hedge_securities = ['STOXX50E', '^FCHI'] # hedge universe
         self.delta_portfolio = 10 # mlnUSD (default 10)
 
+class portfolio_manager():
 
-            
+    def __init__(self, rics, notional):
+        self.rics = rics
+        self.size = len(rics)
+        self.notional = notional
+        self.nb_decimals = 6
+        self.scale = 252
+        self.covariance_matrix = None
+        self.correlation_matrix = None
+        self.returns = None
+        self.volatilities = None
+
+    def compute_covariance_matrix(self, bool_print=True):
+        rics = self.rics
+        size = len(self.rics) # Number of securities we are playing with
+        mtx_covar = np.zeros([size,size]) # create an NxN matrix for covariances
+        mtx_correl = np.zeros([size,size]) # create an NxN matrix for correlations
+        vec_returns = np.zeros([size,1]) # compute vertical vector of annualized returns (element 1 = annualized return of security 1, element 2 = annualized return of security 2...)
+        vec_volatilities = np.zeros([size,1]) # same for volatilities (eg. element 5 = annualized volatility of asset 5)
+        returns = []
+        for i in range(size):
+            ric_x = rics[i]
+            for j in range(i+1):
+                ric_y = rics[j]
+                t = file_functions.load_synchronized_timeseries(ric_x, ric_y)
+                ret_x = t['return_x'].values
+                ret_y = t['return_y'].values
+                returns = [ret_x, ret_y] # now we have an array like list of synchronize returns and we can compute cov and corr matrices
+                # Covariances
+                temp_mtx = np.cov(returns)
+                temp_covar = self.scale*temp_mtx[0][1] # we compute the annualized covariances
+                temp_covar = np.round(temp_covar, self.nb_decimals) # we round them
+                mtx_covar[i][j] = temp_covar
+                mtx_covar[j][i] = temp_covar
+                # Correlations (same process)
+                temp_mtx = np.corrcoef(returns)
+                temp_correl = self.scale*temp_mtx[0][1] 
+                temp_correl = np.round(temp_correl, self.nb_decimals) 
+                mtx_correl[i][j] = temp_correl
+                mtx_correl[j][i] = temp_correl
+                if j == 0: # if j = 0 update reuturns (because we don't want to update returs constantly all the time, only once)
+                    temp_ret = ret_x
+                # Mean returns
+                temp_mean = np.round(self.scale*np.mean(temp_ret), self.nb_decimals) # return is linear in time (brownian motion)
+                vec_returns[i] = temp_mean
+                # Volatilities
+                temp_volatility = np.round(np.sqrt(self.scale)*np.std(temp_ret), self.nb_decimals) # volatility grows with the square root of time
+                vec_volatilities[i] = temp_volatility
+        # Compute eigenvalues and eigenvectors for symmetric matrices
+        eigenvalues, eigenvectors = LA.eigh(mtx_covar)
+
+        self.covariance_matrix = mtx_covar
+        self.correlation_matrix = mtx_correl
+        self.returns = vec_returns
+        self.volatilities = vec_volatilities
+        self.eigenvalues = eigenvalues
+        self.eigenvectors = eigenvectors
+
+        if bool_print:
+            print('------')
+            print('Securities:')
+            print(self.rics)
+            print('------')
+            print('Returns (annualized):')
+            print(self.returns)
+            print('------')
+            print('Volatilities (annualized):')
+            print(self.volatilities)
+            print('------')
+            print('Variance-covariance matrix (annualized):')
+            print(self.covariance_matrix)
+            print('------')
+            print('Correlation matrix (annualized):')
+            print(self.correlation_matrix)
+            print('------')
+            print('Eigenvalues:')
+            print(self.eigenvalues)
+            print('------')
+            print('Eigenvectors:')
+            print(self.eigenvectors)
+
+    def compute_portfolio(self, portfolio_type):
+        
+        portfolio = portfolio_item(self.rics, self.notional)
+        
+        if portfolio_type == 'min-variance':
+            portfolio.type = portfolio_type
+            portfolio.variance_explained = self.eigenvalues[0] / sum(abs(self.eigenvalues)) # R^2 of the variance explained by the eigenvector (abs = absolute value)
+            eigenvector = self.eigenvectors[:,0] # first column is the min-variance eigenvector
+            if max(eigenvector) < 0: # if all weights aree negative, return a long-only portfolio
+                eigenvector = - eigenvector
+            portfolio.weights = self.notional * eigenvector / sum(abs(eigenvector))
+        
+        elif portfolio_type == 'pca':
+            portfolio.type = portfolio_type
+            portfolio.variance_explained = self.eigenvalues[-1] / sum(abs(self.eigenvalues)) # R^2 of the variance explained by the eigenvector (abs = absolute value)
+            eigenvector = self.eigenvectors[:,-1] # first column is the min-variance eigenvector
+            if max(eigenvector) < 0:
+                eigenvector = - eigenvector
+            portfolio.weights = self.notional * eigenvector / sum(abs(eigenvector))
+        
+        else:
+            portfolio.type = 'equi-weight'
+            portfolio.weights = (self.notional / self.size) * np.ones([self.size])
+        
+        portfolio.delta = sum(portfolio.weights)
+        return portfolio
+
+
+class portfolio_item():
+
+    def __init__(self, rics, notional):
+        self.rics = rics
+        self.notional = notional
+        self.type = ''
+        self.weights = []
+        self.delta = 0.0
+        self.variance_explained = None
+
+    def summary(self):
+        print('------')
+        print('Portfolio type: ' + self.type)
+        print('Rics:')
+        print(self.rics)
+        print('Weights:')
+        print(self.weights)
+        if not self.variance_explained == None:
+            print('Variance explained: ' + str(self.variance_explained))
+        print('Notional (mlnUSD): ' + str(self.notional))
+        print('Delta (mlnUSD): ' + str(self.delta))
+                
 
 
 
