@@ -343,7 +343,7 @@ class portfolio_manager():
 
     def compute_covariance_matrix(self, bool_print=True):
         rics = self.rics
-        size = len(self.rics) # Number of securities we are playing with
+        size = len(rics) # Number of securities we are playing with
         mtx_covar = np.zeros([size,size]) # create an NxN matrix for covariances
         mtx_correl = np.zeros([size,size]) # create an NxN matrix for correlations
         vec_returns = np.zeros([size,1]) # compute vertical vector of annualized returns (element 1 = annualized return of security 1, element 2 = annualized return of security 2...)
@@ -365,11 +365,11 @@ class portfolio_manager():
                 mtx_covar[j][i] = temp_covar
                 # Correlations (same process)
                 temp_mtx = np.corrcoef(returns)
-                temp_correl = self.scale*temp_mtx[0][1] 
+                temp_correl = temp_mtx[0][1]
                 temp_correl = np.round(temp_correl, self.nb_decimals) 
                 mtx_correl[i][j] = temp_correl
                 mtx_correl[j][i] = temp_correl
-                if j == 0: # if j = 0 update reuturns (because we don't want to update returs constantly all the time, only once)
+                if j == 0: # if j = 0 update returns (because we don't want to update returs constantly all the time, only once)
                     temp_ret = ret_x
                 # Mean returns
                 temp_mean = np.round(self.scale*np.mean(temp_ret), self.nb_decimals) # return is linear in time (brownian motion)
