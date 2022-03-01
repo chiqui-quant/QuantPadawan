@@ -130,7 +130,7 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
 
     # Plot efficient frontier
     plt.figure()
-    plt.title('Efficient Frontier for a portfolio including ' + rics[0])
+    plt.title('Efficient Frontier for: ' + str(rics))
     plt.scatter(volatilities,returns)
     if include_min_var:
         plt.plot(x1, y1, "ok", label=label1) # black cross
