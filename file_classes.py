@@ -538,7 +538,16 @@ class portfolio_item():
         if not self.sharpe_annual == None:
             print('Sharpe ratio annual: ' + str(self.sharpe_annual))
                
-                
+class option_input:
+
+    def __init__(self):
+        self.price = None                
+        self.time = None                
+        self.volatility = None                
+        self.interest_rate = None       
+        self.maturity = None  
+        self.strike = None
+        self.call_or_put = None             
 
 
 
