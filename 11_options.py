@@ -21,6 +21,15 @@ inputs.interest_rate = 0.01
 inputs.maturity = 2/12 # in years
 inputs.strike = 100
 inputs.call_or_put = 'call'
+number_simulations = 1*10**6
 
+# Price using Black-Scholes formula
 price_black_scholes = file_functions.compute_price_black_scholes(inputs)
-print(price_black_scholes)
+print('Price using Black-Scholes formula | ' + str(inputs.call_or_put) + '\n'\
+    + str(price_black_scholes))
+print('------')
+
+# Price using Monte Carlo simulations
+prices_monte_carlo = file_functions.compute_price_monte_carlo(inputs, number_simulations)
+print(prices_monte_carlo)
+prices_monte_carlo.plot_histogram()
