@@ -6,7 +6,6 @@ import importlib
 import matplotlib.pyplot as plt
 from scipy.stats import skew, kurtosis, chi2, linregress
 from scipy.optimize import minimize
-from numpy import linalg as LA
 
 # Import our own files and reload
 import file_classes
