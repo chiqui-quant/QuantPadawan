@@ -20,7 +20,7 @@ inputs.maturity = 12/12
 inputs.strike = 20
 inputs.call_or_put = 'call'
 
-radius = 0.95
+radius = 0.1 # Note: this allows you to 'zoom' the plot (change the scale)
 inputs.price = np.linspace(1-radius, 1+radius,1000) * inputs.strike # to avoid zeros in the computation
 months = [0,3,6,9,11] # vector of months for which we compute option prices
 dict_plots = {}
@@ -43,8 +43,8 @@ plt.title('Plot of option prices | ' + inputs.call_or_put)
 for month in months:
     plt.plot(inputs.price, dict_plots[month], label=str(month) + '-month')
 plt.plot(inputs.price, payoff, label = 'payoff')
-plt.ylabel('Price underlying')
-plt.xlabel('Price option')
+plt.ylabel('Price option')
+plt.xlabel('Price underlying')
 plt.legend()
 plt.grid()
 plt.show()
