@@ -52,6 +52,10 @@ def load_synchronized_timeseries(ric_x, ric_y):
     t['price_y'] = table_y_sync['close']
     t['return_y'] = table_y_sync['return_close']
 
+    # Added previous close for stat_arb
+    t['price_x_previous'] = table_x_sync['close_previous'] # previous close benchmark
+    t['price_y_previous'] = table_y_sync['close_previous'] # previous close ric
+    
     return t
 
 def cost_function_hedge(x, portfolio_delta, portfolio_beta, betas, regularization):

@@ -589,7 +589,17 @@ class montecarlo_item():
         dm.plot_histogram() # plot histogram
         print(dm) # write all data in console
 
-        
+class backtest:
+    
+    def __init__(self):
+        self.ric_long = 'TOTF.PA' # numerator
+        self.ric_long = 'REP.MC' # denominator
+        self.rolling_days = 20 # N
+        self.level_1 = 1. # a
+        self.level_2 = 2. # b
+        self.data_cut = 0.7 # 70% in-sample and 30% out-of-sample
+        self.data_type = 'in-sample' # in-sample out-of-sample
+
 
 
 
