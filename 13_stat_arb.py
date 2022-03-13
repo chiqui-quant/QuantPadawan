@@ -65,7 +65,7 @@ timeseries = pd.concat([df1,df2], axis=1) # axis=0 for rows, axis=1 for columns
 timeseries = timeseries.dropna()
 timeseries = timeseries.reset_index(drop=True)
 
-# Plot
+# Plot Bollinger bands and current spread
 timestamps = timeseries['date']
 spread = timeseries['spread']
 mu = timeseries['mean']

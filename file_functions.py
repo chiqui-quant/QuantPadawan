@@ -101,10 +101,12 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
     max_returns = np.max(port_mgr.returns)
     returns = min_returns + np.linspace(0.1,0.9,100) * (max_returns-min_returns) # this way we generate 100 returns between min and max (in order to be inside the convex case we consider between 0.1 and 0.9)
     volatilities = np.zeros([len(returns),1]) 
+    sharpe_ratios = np.zeros([len(returns),1])
     counter = 0
     for ret in returns: # compute markowitz portfolio for each return and compute its volatility
         port_markowitz = port_mgr.compute_portfolio('markowitz', ret)
         volatilities[counter] = port_markowitz.volatility_annual
+        sharpe_ratios[counter] = port_markowitz.sharpe_annual
         counter += 1
 
     # Compute special portfolios
@@ -135,7 +137,8 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
     # Plot efficient frontier
     plt.figure()
     plt.title('Efficient Frontier for: ' + str(rics))
-    plt.scatter(volatilities,returns)
+    plt.scatter(volatilities,returns, c=sharpe_ratios)
+    plt.colorbar(label='Sharpe Ratio')
     if include_min_var:
         plt.plot(x1, y1, "ok", label=label1) # black cross
     plt.plot(x2, y2, "^r", label=label2) # red dot
@@ -144,8 +147,8 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
     plt.plot(x5, y5, "sy", label=label5) # yellow triangle
     plt.plot(x6, y6, "sr", label=label6) # red square
     plt.plot(x7, y7, "sk", label=label7) # black triangle
-    plt.ylabel('portfolio return')
-    plt.xlabel('portfolio volatility')
+    plt.ylabel('Portfolio return')
+    plt.xlabel('Portfolio volatility')
     plt.grid()
     if include_min_var:
         plt.legend(loc='best')
