@@ -19,7 +19,7 @@ rics = ['BBVA.MC', 'AAL.L', 'ANTO.L', 'EONGn.DE', 'RIO.L']
 # Input parameters
 notional = 300 # mlnUSD
 target_return = 0.0 
-include_min_var = False
+include_min_var = True
 
 # Efficient frontier
 dict_portfolios = file_functions.compute_efficient_frontier(rics, notional, target_return, include_min_var)

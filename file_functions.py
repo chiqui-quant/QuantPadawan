@@ -140,7 +140,7 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
     plt.scatter(volatilities,returns, c=sharpe_ratios)
     plt.colorbar(label='Sharpe Ratio')
     if include_min_var:
-        plt.plot(x1, y1, "ok", label=label1) # black cross
+        plt.plot(x1, y1, "^X", label=label1) # black cross
     plt.plot(x2, y2, "^r", label=label2) # red dot
     plt.plot(x3, y3, "^y", label=label3) # yellow square
     plt.plot(x4, y4, "^k", label=label4) # black triangle
