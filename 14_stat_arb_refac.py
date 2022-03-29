@@ -10,6 +10,7 @@ from scipy.stats import skew, kurtosis, chi2
 import file_classes
 importlib.reload(file_classes)
 import file_functions
+importlib.reload(file_functions)
 
 # Inputs
 backtest = file_classes.backtest()

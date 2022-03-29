@@ -626,7 +626,7 @@ class backtest:
         df['spread_previous'] = df['spread_previous'] / base
         self.dataframe_data = df
         
-    def compute_indicator(self,bool_plot=True):
+    def compute_indicator(self,bool_plot=False):
         # Compute bollinger bands
         size = self.dataframe_data.shape[0]
         columns = ['lower_2','lower_1', 'mean', 'upper_1', 'upper_2']
