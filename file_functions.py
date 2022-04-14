@@ -90,7 +90,7 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
     label4 = 'volatility-weighted' # volatility-weighted
     label5 = 'long-only' # long-only portfolio with minimum variance
     label6 = 'markowitz-avg' # Markowitz with return = average of returns
-    label7 = 'markowitz-target' # Markowitz with return =target_return
+    label7 = 'markowitz-target' # Markowitz with return = target_return
 
     # Compute covariance matrix
     port_mgr = file_classes.portfolio_manager(rics, notional)
@@ -140,7 +140,7 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
     plt.scatter(volatilities,returns, c=sharpe_ratios)
     plt.colorbar(label='Sharpe Ratio')
     if include_min_var:
-        plt.plot(x1, y1, "^X", label=label1) # black cross
+        plt.plot(x1, y1, "rP", label=label1) # red plus
     plt.plot(x2, y2, "^r", label=label2) # red dot
     plt.plot(x3, y3, "^y", label=label3) # yellow square
     plt.plot(x4, y4, "^k", label=label4) # black triangle
