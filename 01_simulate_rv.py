@@ -20,19 +20,19 @@ dist_type = 'simulated RV' # real custom
 
 if dist_name == 'normal':
     x = np.random.standard_normal(nb_sims)
-    x_description = dist_type + ' ' + dist_name
+    x_description = dist_type + ': ' + dist_name
 elif dist_name == 'exponential':
     x = np.random.standard_exponential(nb_sims)
-    x_description = dist_type + ' ' + dist_name
+    x_description = dist_type + ': ' + dist_name
 elif dist_name == 'uniform':
     x = np.random.uniform(0,1,nb_sims)
-    x_description = dist_type + ' ' + dist_name
+    x_description = dist_type + ': ' + dist_name
 elif dist_name == 'student':
     x = np.random.standard_t(df=df,size=nb_sims)
-    x_description = dist_type + ' ' + dist_name + ' | df = ' + str(df)
+    x_description = dist_type + ': ' + dist_name + ' | df = ' + str(df)
 elif dist_name == 'chi-square':
     x = np.random.chisquare(df=df,size=nb_sims)
-    x_description = dist_type + ' ' + dist_name + ' | df = ' + str(df)
+    x_description = dist_type + ': ' + dist_name + ' | df = ' + str(df)
 
 '''
 Goal: create a Jarque-Bera normality test
@@ -55,9 +55,8 @@ print('JB statistic is ' + str(x_jb_stat))
 print('p-value is ' + str(x_p_value))
 print('is normal ' + str(x_is_normal))
 
-
 # plot histogram
 plt.figure()
-plt.hist(x,bins=100) # bins is the number of segments
+plt.hist(x,bins=100) # bins defines the intervals of the histogram on the x axis
 plt.title(x_description)
 plt.show()
