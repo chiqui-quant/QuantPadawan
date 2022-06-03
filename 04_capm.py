@@ -12,10 +12,9 @@ importlib.reload(file_classes)
 import file_functions
 importlib.reload(file_functions)
 
-
 # Inputs
-benchmark = '^STOXX50E' # variable x
-security = 'REP.MC' # variable y
+benchmark = 'IMIB.MI' # variable x
+security = 'A2A.MI' # variable y
 
 # Working with classes
 capm = file_classes.capm_manager(benchmark, security)
@@ -24,7 +23,6 @@ capm.plot_timeseries()
 capm.compute()
 capm.plot_linear_regression()
 print(capm)
-
 
 # Working without classes
 # Load synchronized timeseries
@@ -37,7 +35,7 @@ print(capm)
 # slope = np.round(slope, nb_decimals)
 # intercept = np.round(intercept, nb_decimals)
 # p_value = np.round(p_value, nb_decimals)
-# null_hypothesis = p_value > 0.05 # if p_value < 0.05 reject the null hypothesis (that is, that the linear regression is bad, eg. ^STOXX50E with EURUSD=X)
+# null_hypothesis = p_value > 0.05 # if p_value < 0.05 reject the null hypothesis (that is, that the linear regression is bad, try ^STOXX50E with EURUSD=X and see output)
 # r_value = np.round(r_value, nb_decimals) # correlation coefficient
 # r_squared = np.round(r_value**2, nb_decimals) #pct of variance of y explained by x
 # predictor_linreg = intercept + slope*x

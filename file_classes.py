@@ -98,7 +98,7 @@ class distribution_manager():
 
     def plot_histogram(self):
         plt.figure()
-        plt.hist(self.vec_returns,bins=100) # bins is the number of segments
+        plt.hist(self.vec_returns,bins=100) # bins is the interval of the rectangles in the x axis
         plt.title(self.description)
         plt.xlabel(self.plot_str())
         plt.show()
@@ -190,7 +190,7 @@ class capm_manager():
         self.p_value = np.round(p_value, self.nb_decimals)
         self.null_hypothesis = p_value > 0.05 # if p_value < 0.05 reject the null hypothesis (that is, that the linear regression is bad, eg. ^STOXX50E with EURUSD=X)
         self.correlation = np.round(r_value, self.nb_decimals) # correlation coefficient
-        self.r_squared = np.round(r_value**2, self.nb_decimals) #pct of variance of y explained by x
+        self.r_squared = np.round(r_value**2, self.nb_decimals) # pct of variance of y explained by x
         self.predictor_linreg = intercept + slope*x
 
     def plot_timeseries(self):
@@ -225,7 +225,7 @@ class hedge_manager():
     
     def __init__(self, inputs):
         self.inputs = inputs # hedge inputs
-        self.benchmark = inputs.benchmark # the market in CAPM (in general ^STOXX50E)
+        self.benchmark = inputs.benchmark # the market in CAPM (in general a market index)
         self.security = inputs.security # portfolio to hedge
         self.hedge_securities = inputs.hedge_securities # hedge universe
         self.nb_hedges = len(self.hedge_securities)
@@ -247,13 +247,13 @@ class hedge_manager():
         capm.load_timeseries()
         capm.compute()
         beta_portfolio = capm.beta
-        beta_portfolio_usd = beta_portfolio * delta_portfolio # mln USD
+        beta_portfolio_usd = beta_portfolio * delta_portfolio # mln EUR
         # Print input
         print('------')
         print('Input portfolio:')
-        print('Delta mlnUSD for ' + security + ' is ' + str(delta_portfolio))
+        print('Delta mlnEUR for ' + security + ' is ' + str(delta_portfolio))
         print('Beta for ' + security + ' vs ' + benchmark + ' is ' + str(beta_portfolio))
-        print('Beta mlnUSD for ' + security + ' vs ' + benchmark + ' is ' +  str(beta_portfolio_usd))
+        print('Beta mlnEUR for ' + security + ' vs ' + benchmark + ' is ' +  str(beta_portfolio_usd))
         # Compute betas for the hedges (construct an array of zeros and add the computed betas)
         shape = [len(hedge_securities),1]
         betas = np.zeros(shape)
@@ -311,10 +311,10 @@ class hedge_manager():
         print('Optimization result - ' + algo_type + ' solution')
         print('------')
         print('Delta portfolio: ' + str(self.delta_portfolio))
-        print('Beta portfolio USD: ' + str(self.beta_portfolio_usd))
+        print('Beta portfolio EUR: ' + str(self.beta_portfolio_usd))
         print('------')
         print('Delta hedge: ' + str(self.hedge_delta))
-        print('Beta hedge USD: ' + str(self.hedge_beta_usd))
+        print('Beta hedge EUR: ' + str(self.hedge_beta_usd))
         print('------')
         print('Optimal hedge: ')
         print(self.optimal_hedge)
@@ -324,9 +324,9 @@ class hedge_input():
 
     def __init__(self):
         self.benchmark = None # the market in CAPM (in general ^STOXX50E)
-        self.security = 'BBVA.MC' # portfolio to hedge
-        self.hedge_securities = ['STOXX50E', '^FCHI'] # hedge universe
-        self.delta_portfolio = 10 # mlnUSD (default 10)
+        self.security = 'A2A.MI' # portfolio to hedge
+        self.hedge_securities = ['AMP.MI', 'ATL.MI'] # hedge universe
+        self.delta_portfolio = 10 # mlnEUR (default 10)
 
 class portfolio_manager():
 
@@ -521,14 +521,14 @@ class portfolio_item():
         print(self.rics)
         print('Weights:')
         print(self.weights)
-        print('Notional (mlnUSD): ' + str(self.notional))
-        print('Delta (mlnUSD): ' + str(self.delta))
+        print('Notional (mln EUR): ' + str(self.notional))
+        print('Delta (mln EUR): ' + str(self.delta))
         if not self.variance_explained == None:
             print('Variance explained: ' + str(self.variance_explained))
         if not self.pnl_annual_usd == None:
-            print('Profit and loss annual (mln USD): ' + str(self.pnl_annual_usd))
+            print('Profit and loss annual (mln EUR): ' + str(self.pnl_annual_usd))
         if not self.volatility_annual_usd == None:
-            print('Volatility annual (mln USD): ' + str(self.volatility_annual_usd))
+            print('Volatility annual (mln EUR): ' + str(self.volatility_annual_usd))
         if not self.target_return == None:
             print('Target return: ' + str(self.target_return))
         if not self.return_annual == None:

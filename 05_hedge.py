@@ -12,16 +12,12 @@ importlib.reload(file_classes)
 import file_functions
 importlib.reload(file_functions)
 
-###############################
-# pseudo code for encapsulation
-##############################
-
 # Inputs
 inputs = file_classes.hedge_input()
-inputs.benchmark = '^STOXX50E'
-inputs.security = 'BBVA.MC'
-inputs.hedge_securities = ['^STOXX50E', '^FCHI']
-inputs.delta_portfolio = 10 # mlnUSD
+inputs.benchmark = 'IMIB.MI'
+inputs.security = 'A2A.MI'
+inputs.hedge_securities = ['AMP.MI', 'ATL.MI']
+inputs.delta_portfolio = 10 # mln EUR
 
 # Compute hedges
 hedge = file_classes.hedge_manager(inputs)
@@ -33,24 +29,24 @@ hedge.compute() # compute and print optimal hedge via CAPM
 ###################################
 
 # Input parameters
-# benchmark = '^STOXX50E'
-# security = 'BBVA.MC' # or ric, Reuters Instruent Code (ticker-like code used by Refinitiv to identify financial instruments and indices)
-# hedge_rics = ['^STOXX50E', '^FCHI']
-# delta_portfolio = 10 # mln USD
+# benchmark = 'IMIB.MI'
+# security = 'A2A.MI' # or ric, Reuters Instruent Code (ticker-like code used by Refinitiv to identify financial instruments and indices)
+# hedge_rics = ['AMP.MI', 'ATL.MI']
+# delta_portfolio = 10 # mln EUR
 
 # # Compute betas
 # capm = file_classes.capm_manager(benchmark, security)
 # capm.load_timeseries()
 # capm.compute()
 # beta_portfolio = capm.beta
-# beta_portfolio_usd = beta_portfolio * delta_portfolio # mln USD
+# beta_portfolio_usd = beta_portfolio * delta_portfolio # mln EUR
 
 # # Print input
 # print('------')
 # print('Input portfolio:')
-# print('Delta mlnUSD for ' + security + ' is ' + str(delta_portfolio))
+# print('Delta mln EUR for ' + security + ' is ' + str(delta_portfolio))
 # print('Beta for ' + security + ' vs ' + benchmark + ' is ' + str(beta_portfolio))
-# print('Beta mlnUSD for ' + security + ' vs ' + benchmark + ' is ' +  str(beta_portfolio_usd))
+# print('Beta mln EUR for ' + security + ' vs ' + benchmark + ' is ' +  str(beta_portfolio_usd))
 
 # # Compute betas for the hedges (construct an array of zeros and add the computed betas)
 # shape = [len(hedge_rics),1]

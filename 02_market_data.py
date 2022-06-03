@@ -10,7 +10,7 @@ from scipy.stats import skew, kurtosis, chi2
 directory = 'C:\\Users\\Chiqui\\Desktop\\Python Projects\\QuantPadawan\\data\\'
 
 # Inputs
-ric = 'A2A.MI'
+ric = 'IMIB.MI' # reuters instrument code (or ticker)
 path = directory + ric + '.csv'
 raw_data = pd.read_csv(path)
 
@@ -30,13 +30,13 @@ t['return_close'] = t['close']/t['close_previous'] - 1 # compute daily returns a
 t = t.dropna() # drop null values
 t = t.reset_index(drop=True)
 
-x = t['return_close'].values
+x = t['return_close'].values # store the values of close returns into a variable x
 x_description = 'Market data ' + ric
-nb_rows = len(x)
+nb_rows = len(x) # store the lenght (how many values) of x into a variable called nb_rows
 
 # Plot timeseries of price
 plt.figure()
-plt.plot(t['date'],t['close'])
+plt.plot(t['date'],t['close']) # plot the values from the table we constructed (date on x-axis and close on y-axis) 
 plt.title('Time series real prices ' + ric)
 plt.xlabel('Time')
 plt.ylabel('Price')
@@ -49,8 +49,8 @@ Goal: create a Jarque-Bera normality test
 x_mean = np.mean(x)
 x_std = np.std(x)
 x_skew = skew(x)
-x_kurtosis = kurtosis(x) # excess kurtosis
-x_jb_stat = nb_rows/6*(x_skew**2 + 1/4*x_kurtosis**2)
+x_excess_kurtosis = kurtosis(x) # excess kurtosis
+x_jb_stat = nb_rows/6*(x_skew**2 + 1/4*x_excess_kurtosis**2)
 x_p_value = 1 - chi2.cdf(x_jb_stat, df=2) 
 x_is_normal = (x_p_value > 0.05) # equivalently jb < 6
 
@@ -59,13 +59,13 @@ print('Ric is ' + ric)
 print('mean is ' + str(x_mean))
 print('standard deviation is ' + str(x_std))
 print('skewness is ' + str(x_skew))
-print('kurtosis is ' + str(x_kurtosis))
+print('kurtosis is ' + str(x_excess_kurtosis))
 print('JB statistic is ' + str(x_jb_stat))
 print('p-value is ' + str(x_p_value))
 print('is normal ' + str(x_is_normal))
 
 # Plot histogram
 plt.figure()
-plt.hist(x,bins=100) # bins is the number of segments
+plt.hist(x,bins=100) 
 plt.title(x_description)
 plt.show()

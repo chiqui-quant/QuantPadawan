@@ -16,9 +16,9 @@ importlib.reload(file_functions)
 
 # Note: small changes in inputs can give rise to large changes in the portfolio (variance-covariance matrix instability)
 nb_decimals = 6 # 3 4 5 6
-scale = 252 # 1 252(for annualized covariance assuming brownian motion, so that variance increases with sqrt of time)
-notional = 10 # mln USD
-rics = ['BBVA.MC', 'AAL.L', 'ANTO.L', 'EONGn.DE', 'RIO.L']
+scale = 252 # 1 252 (for annualized covariance assuming brownian motion, so that variance increases with sqrt of time)
+notional = 10 # mln EUR
+rics = ['A2A.MI', 'AMP.MI', 'ATL.MI', 'AZM.MI', 'IP.MI']
 
 # Compute covariance matrix via np.cov
 # returns = [] # we create an empty list of returns and then append them (where each row is an array of a given asset returns)
@@ -66,7 +66,7 @@ for i in range(size):
         mtx_covar[j][i] = temp_covar
         # Correlations (same process)
         temp_mtx = np.corrcoef(returns)
-        temp_correl = scale*temp_mtx[0][1] 
+        temp_correl = temp_mtx[0][1] 
         temp_correl = np.round(temp_correl, nb_decimals) 
         mtx_correl[i][j] = temp_correl
         mtx_correl[j][i] = temp_correl
@@ -119,23 +119,23 @@ print(eigenvectors)
 # Min-variance portfolio
 print('------')
 print('Min-variance portfolio:')
-print('notional (mlnUSD) = ' + str(notional))
+print('notional (mln EUR) = ' + str(notional))
 variance_explained = eigenvalues[0] / sum(abs(eigenvalues)) # R^2 of the variance explained by the eigenvector (abs = absolute value)
 eigenvector = eigenvectors[:,0] # first column is the min-variance eigenvector
 port_min_var = notional * eigenvector / sum(abs(eigenvector))
 delta_min_var = sum(port_min_var)
-print('delta (mlnUSD) = ' + str(delta_min_var))
+print('delta (mln EUR) = ' + str(delta_min_var))
 print('variance explained = ' + str(variance_explained))
 
 # PCA (max-variance) portfolio
 print('------')
 print('PCA portfolio (max-variance):')
-print('notional (mlnUSD) = ' + str(notional))
+print('notional (mln EUR) = ' + str(notional))
 variance_explained = eigenvalues[-1] / sum(abs(eigenvalues)) # R^2 of the variance explained by the eigenvector
 eigenvector = eigenvectors[:,-1] # first column is the min-variance eigenvector
 port_pca = notional * eigenvector / sum(abs(eigenvector))
 delta_pca = sum(port_pca)
-print('delta (mlnUSD) = ' + str(delta_pca))
+print('delta (mln EUR) = ' + str(delta_pca))
 print('variance explained = ' + str(variance_explained))
 # Note: the only difference for the max-variance portfolio is that we take the last column
 

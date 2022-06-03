@@ -14,8 +14,8 @@ importlib.reload(file_classes)
 import file_functions
 importlib.reload(file_functions)
 
-notional = 300 # mln USD
-rics = ['BBVA.MC', 'AAL.L', 'ANTO.L', 'EONGn.DE', 'RIO.L']
+notional = 10 # mln EUR
+rics = ['A2A.MI', 'AMP.MI', 'ATL.MI', 'AZM.MI', 'BAMI.MI']
 
 port_mgr = file_classes.portfolio_manager(rics, notional)
 port_mgr.compute_covariance_matrix(bool_print=False)

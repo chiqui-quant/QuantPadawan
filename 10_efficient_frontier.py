@@ -14,12 +14,12 @@ import file_functions
 importlib.reload(file_functions)
 
 # Universe
-rics = ['A2a.MI', 'AMP.MI', 'ATL.MI', 'AZM.MI', 'IP.MI']
+rics = ['A2A.MI', 'AMP.MI', 'ATL.MI', 'AZM.MI', 'IP.MI']
 
 # Input parameters
-notional = 300 # mlnUSD
-target_return = None
-include_min_var = False 
+notional = 10 # mln EUR
+target_return = 0.16
+include_min_var = False
 
 # Efficient frontier
 dict_portfolios = file_functions.compute_efficient_frontier(rics, notional, target_return, include_min_var)

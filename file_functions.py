@@ -139,14 +139,15 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
     plt.title('Efficient Frontier for: ' + str(rics))
     plt.scatter(volatilities,returns, c=sharpe_ratios)
     plt.colorbar(label='Sharpe Ratio')
+    # Note: to customize the code below check matplotlib's markers
     if include_min_var:
-        plt.plot(x1, y1, "rP", label=label1) # red plus
-    plt.plot(x2, y2, "^r", label=label2) # red dot
-    plt.plot(x3, y3, "^y", label=label3) # yellow square
-    plt.plot(x4, y4, "^k", label=label4) # black triangle
-    plt.plot(x5, y5, "sy", label=label5) # yellow triangle
-    plt.plot(x6, y6, "sr", label=label6) # red square
-    plt.plot(x7, y7, "sk", label=label7) # black triangle
+        plt.plot(x1, y1, "rP", label=label1)
+    plt.plot(x2, y2, "ko", label=label2) 
+    plt.plot(x3, y3, "k^", label=label3)  
+    plt.plot(x4, y4, "k*", label=label4) 
+    plt.plot(x5, y5, "kP", label=label5) 
+    plt.plot(x6, y6, "ks", label=label6) 
+    plt.plot(x7, y7, "kx", label=label7) 
     plt.ylabel('Portfolio return')
     plt.xlabel('Portfolio volatility')
     plt.grid()

@@ -15,10 +15,10 @@ importlib.reload(file_functions)
 
 # Inputs
 inputs = file_classes.hedge_input()
-inputs.benchmark = '^STOXX50E'
-inputs.security = 'BBVA.MC'
-inputs.hedge_securities = ['^GDAXI', '^FCHI'] 
-inputs.delta_portfolio = 10 # mln USD
+inputs.benchmark = 'IMIB.MI'
+inputs.security = 'A2A.MI'
+inputs.hedge_securities = ['AMP.MI', 'ATL.MI'] 
+inputs.delta_portfolio = 10 # mln EUR
 
 # Computations
 hedge = file_classes.hedge_manager(inputs)
