@@ -98,6 +98,8 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
 
     # Compute vectors of returns and volatilities for Markowitz portfolios
     min_returns = np.min(port_mgr.returns)
+    if min_returns < 0.0:
+        min_returns = 0.01
     max_returns = np.max(port_mgr.returns)
     returns = min_returns + np.linspace(0.1,0.9,100) * (max_returns-min_returns) # this way we generate 100 returns between min and max (in order to be inside the convex case we consider between 0.1 and 0.9)
     volatilities = np.zeros([len(returns),1]) 
@@ -136,7 +138,11 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
 
     # Plot efficient frontier
     plt.figure()
-    plt.title('Efficient Frontier for: ' + str(rics))
+    if len(rics) < 10:
+        plt.title('Efficient Frontier for: ' + str(rics))
+    elif len(rics) == 40:
+        plt.title('Efficient Frontier for all 40 stocks in FTSE MIB')
+    # plt.scatter(volatilities,returns) # no sharpe ratio
     plt.scatter(volatilities,returns, c=sharpe_ratios)
     plt.colorbar(label='Sharpe Ratio')
     # Note: to customize the code below check matplotlib's markers

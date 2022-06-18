@@ -68,30 +68,30 @@ class distribution_manager():
                 x = np.random.chisquare(df=degrees_freedom,size=nb_sims)
                 x_description = data_type + ' ' + dist_name + ' | df = ' + str(degrees_freedom)
                 
-            self.description = x_description
-            self.nb_rows = nb_sims
-            self.vec_returns = x
+                self.description = x_description
+                self.nb_rows = nb_sims
+                self.vec_returns = x
 
 
         elif data_type == 'real':
-            # directory = 'C:\\Users\\Chiqui\\Desktop\\Python Projects\\QuantPadawan\\data\\'
+            directory = 'C:\\Users\\Chiqui\\Desktop\\Python Projects\\QuantPadawan\\data\\'
 
-            # ric = self.inputs.variable_name
-            # path = directory + ric + '.csv'
-            # raw_data = pd.read_csv(path)
-            # t = pd.DataFrame() # t (for table) with no elements
-            # t['date'] = pd.to_datetime(raw_data['Date'], dayfirst=True) # if dayfirst is omitted we have American dates
-            # t['close'] = raw_data['Close']
-            # t.sort_values(by='date',ascending=True)
-            # t['close_previous'] = t['close'].shift(1) # shift moves values below by the amount you indicate
-            # t['return_close'] = t['close']/t['close_previous'] - 1
-            # t = t.dropna()
-            # t = t.reset_index(drop=True)
+            ric = self.inputs.variable_name
+            path = directory + ric + '.csv'
+            raw_data = pd.read_csv(path)
+            t = pd.DataFrame() # t (for table) with no elements
+            t['date'] = pd.to_datetime(raw_data['Date'], dayfirst=True) # if dayfirst is omitted we have American dates
+            t['close'] = raw_data['Close']
+            t.sort_values(by='date',ascending=True)
+            t['close_previous'] = t['close'].shift(1) # shift moves values below by the amount you indicate
+            t['return_close'] = t['close']/t['close_previous'] - 1
+            t = t.dropna()
+            t = t.reset_index(drop=True)
             
-            # self.data_table = t
-            # self.description = 'market data ' + ric
-            # self.nb_rows = t.shape[0]
-            # self.vec_returns = t['return_close'].values
+            self.data_table = t
+            self.description = 'market data ' + ric
+            self.nb_rows = t.shape[0]
+            self.vec_returns = t['return_close'].values #
 
             ric = self.inputs.variable_name
             t = file_functions.load_timeseries(ric)
@@ -403,12 +403,12 @@ class portfolio_manager():
             print('------')
             print('Correlation matrix (annualized):')
             print(self.correlation_matrix)
-            print('------')
-            print('Eigenvalues:')
-            print(self.eigenvalues)
-            print('------')
-            print('Eigenvectors:')
-            print(self.eigenvectors)
+            # print('------')
+            # print('Eigenvalues:')
+            # print(self.eigenvalues)
+            # print('------')
+            # print('Eigenvectors:')
+            # print(self.eigenvectors)
 
     def compute_portfolio(self, portfolio_type='default', target_return=None):
         
@@ -494,7 +494,10 @@ class portfolio_manager():
         portfolio.return_annual = np.transpose(self.returns).dot(weights_normalized).item()
         portfolio.volatility_annual = file_functions.compute_portfolio_volatilty(weights_normalized, self.covariance_matrix)
         portfolio.volatility_annual_usd = file_functions.compute_portfolio_volatilty(weights, self.covariance_matrix)
-        portfolio.sharpe_annual = portfolio.return_annual / portfolio.volatility_annual
+        try:
+            portfolio.sharpe_annual = portfolio.return_annual / portfolio.volatility_annual
+        except ZeroDivisionError:
+                portfolio.sharpe_annual = 0
         return portfolio
 
 

@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 import matplotlib as mpl 
@@ -14,7 +15,15 @@ import file_functions
 importlib.reload(file_functions)
 
 # Universe
-rics = ['A2A.MI', 'AMP.MI', 'ATL.MI', 'AZM.MI', 'IP.MI']
+# rics = ['A2A.MI', 'AMP.MI', 'ATL.MI', 'AZM.MI', 'IP.MI']
+
+# All rics in directory (except market index)
+rics = []
+directory = 'C:\\Users\\Chiqui\\Desktop\\Python Projects\\QuantPadawan\\data\\'
+for file in os.listdir(directory):
+    rics.append(file)
+    rics = [file.split('.csv')[0] for file in os.listdir(directory)]
+    rics.remove('IMIB.MI')
 
 # Input parameters
 notional = 10 # mln EUR
