@@ -39,7 +39,7 @@ elif inputs.call_or_put == 'put':
 
 # Plot option prices
 plt.figure()
-plt.title('Plot of option prices | ' + inputs.call_or_put)
+plt.title('Plot of option prices | ' + inputs.call_or_put + ' | Strike price: ' + str(inputs.strike) + '\n' + 'Volatility: ' + str(inputs.volatility) + ' | Interest rate: ' + str(inputs.interest_rate) )
 for month in months:
     plt.plot(inputs.price, dict_plots[month], label=str(month) + '-month')
 plt.plot(inputs.price, payoff, label = 'payoff')
