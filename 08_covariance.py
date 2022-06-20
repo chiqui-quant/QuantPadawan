@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import skew, kurtosis, chi2, linregress
 from scipy.optimize import minimize
 from numpy import linalg as LA
+import seaborn as sns
 
 # Import our own files and reload
 import file_classes
@@ -139,5 +140,11 @@ print('delta (mln EUR) = ' + str(delta_pca))
 print('variance explained = ' + str(variance_explained))
 # Note: the only difference for the max-variance portfolio is that we take the last column
 
+# Plot heatmap
+df = pd.DataFrame(mtx_correl, index = rics)
+ax = sns.heatmap(df, annot=True, cmap="Blues")
+ax.set_yticklabels(rics, rotation=0)
+ax.set_xticklabels(rics)
+plt.show()
 
 
