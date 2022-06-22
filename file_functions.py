@@ -91,6 +91,8 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
     label5 = 'long-only' # long-only portfolio with minimum variance
     label6 = 'markowitz-avg' # Markowitz with return = average of returns
     label7 = 'markowitz-target' # Markowitz with return = target_return
+    label8 = 'min-variance-l1' 
+    label9 = 'min-variance-l2'
 
     # Compute covariance matrix
     port_mgr = file_classes.portfolio_manager(rics, notional)
@@ -119,6 +121,8 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
     port5 = port_mgr.compute_portfolio(label5)
     port6 = port_mgr.compute_portfolio('markowitz')
     port7 = port_mgr.compute_portfolio('markowitz', target_return)
+    port8 = port_mgr.compute_portfolio(label8)
+    port9 = port_mgr.compute_portfolio(label9)
 
     # Create scatterplot of portfolios (volatility vs return)
     x1 = port1.volatility_annual
@@ -135,6 +139,10 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
     y6 = port6.return_annual
     x7 = port7.volatility_annual
     y7 = port7.return_annual
+    x8 = port8.volatility_annual
+    y8 = port8.volatility_annual
+    x9 = port9.return_annual
+    y9 = port9.return_annual
 
     # Plot efficient frontier
     plt.figure()
@@ -154,13 +162,15 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
     plt.plot(x5, y5, "kP", label=label5) 
     plt.plot(x6, y6, "ks", label=label6) 
     plt.plot(x7, y7, "kx", label=label7) 
+    plt.plot(x8, y8, "k<", label=label8) 
+    plt.plot(x9, y9, "kd", label=label9) 
     plt.ylabel('Portfolio return')
     plt.xlabel('Portfolio volatility')
     plt.grid()
     if include_min_var:
         plt.legend(loc='best')
     else:
-        plt.legend(loc='upper right', borderaxespad=0.)
+        plt.legend(loc='best', borderaxespad=0.)
     plt.show()
 
     dict_portfolios = {label1: port1,
@@ -169,7 +179,10 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
                         label4: port4,
                         label5: port5,
                         label6: port6,
-                        label7: port7,}
+                        label7: port7,
+                        label8: port8,
+                        label9: port9,
+                        }
     return dict_portfolios
   
 def compute_price_black_scholes(inputs):
