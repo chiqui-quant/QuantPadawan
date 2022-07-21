@@ -124,7 +124,7 @@ class distribution_manager():
         plot_str = 'mean ' + str(np.round(self.mean, nb_decimals))\
             + ' | std dev ' + str(np.round(self.std, nb_decimals))\
             + ' | skewness ' + str(np.round(self.skew, nb_decimals))\
-            + ' | kurtosis ' + str(np.round(self.kurtosis, nb_decimals)) + '\n'\
+            + ' | excess kurtosis ' + str(np.round(self.kurtosis, nb_decimals)) + '\n'\
             + 'Jarque Bera  ' + str(np.round(self.jb_stat, nb_decimals))\
             + ' | p-value ' + str(np.round(self.p_value, nb_decimals))\
             + ' | is normal ' + str(self.is_normal) + '\n'\
@@ -188,7 +188,7 @@ class capm_manager():
         self.alpha = np.round(intercept, self.nb_decimals)
         self.beta = np.round(slope, self.nb_decimals)
         self.p_value = np.round(p_value, self.nb_decimals)
-        self.null_hypothesis = p_value > 0.05 # if p_value < 0.05 reject the null hypothesis (that is, that the linear regression is bad, eg. ^STOXX50E with EURUSD=X)
+        self.null_hypothesis = p_value > 0.05 # null hypothesis that slope is zero, if p_value < 0.05 reject the null hypothesis (that is, that the linear regression is bad, eg. ^STOXX50E with EURUSD=X)
         self.correlation = np.round(r_value, self.nb_decimals) # correlation coefficient
         self.r_squared = np.round(r_value**2, self.nb_decimals) # pct of variance of y explained by x
         self.predictor_linreg = intercept + slope*x

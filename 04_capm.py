@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 import matplotlib as mpl 
@@ -23,6 +24,39 @@ capm.plot_timeseries()
 capm.compute()
 capm.plot_linear_regression()
 print(capm)
+
+# Table of betas 
+securities = []
+directory = 'C:\\Users\\Chiqui\\Desktop\\Python Projects\\QuantPadawan\\data\\'
+for file in os.listdir(directory):
+    securities.append(file)
+    securities = [file.split('.csv')[0] for file in os.listdir(directory)]
+    securities.remove('IMIB.MI')
+
+t = pd.DataFrame(columns=['Security', 'Beta', 'R-Squared'])
+secs = []
+betas = []
+r_squareds = []
+for sec in securities:
+    capm = file_classes.capm_manager(benchmark, sec)
+    capm.load_timeseries()
+    capm.compute()
+
+    secs.append(capm.security)
+    betas.append(capm.beta)
+    r_squareds.append(capm.r_squared)
+t['Security'] = secs
+t['Beta'] = betas
+t['R-Squared'] = r_squareds
+
+# Plot table
+fig, ax = plt.subplots()
+fig.patch.set_visible(False)
+ax.axis('off')
+ax.axis('tight')
+table = ax.table(cellLoc='center', cellText=t.values, colLabels=t.columns, loc='center')
+# fig.tight_layout()
+plt.show()
 
 # Working without classes
 # Load synchronized timeseries

@@ -36,7 +36,7 @@ importlib.reload(file_classes)
 # (4) Using a class: this is more 'robust' because we define inputs_class and make changes without breaking the rest of the code
 inputs = file_classes.distribution_input()
 inputs.data_type = 'real'
-inputs.variable_name = 'A2A.MI'
+inputs.variable_name = 'IMIB.MI'
 inputs.degrees_freedom = None
 inputs.nb_sims = None
 
