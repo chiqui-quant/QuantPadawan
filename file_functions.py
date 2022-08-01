@@ -140,8 +140,8 @@ def compute_efficient_frontier(rics, notional, target_return, include_min_var):
     x7 = port7.volatility_annual
     y7 = port7.return_annual
     x8 = port8.volatility_annual
-    y8 = port8.volatility_annual
-    x9 = port9.return_annual
+    y8 = port8.return_annual
+    x9 = port9.volatility_annual
     y9 = port9.return_annual
 
     # Plot efficient frontier

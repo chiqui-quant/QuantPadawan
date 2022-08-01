@@ -33,12 +33,11 @@ rics = ['A2A.MI', 'AMP.MI', 'ATL.MI', 'AZM.MI', 'IP.MI']
 
 """
 Important remark: of all the arrays we have we could synchronize all them and stay with the one with 
-lower size. But when we reduce it this way not necessarily they will share the same timestamps. Imagine you 
-reduce the highest number of timestamps with the lowest and you are using the STOXX600, suppose that unluckly
-there is a null day in each day of the stocks in the STOXX600 but that null day is different
-for each of the stocks, that would mean we would have to remove 600 days in the dataset (since the 
-intersection of null days is empty). Now, we initially have around 1200 days, that would mean we would end 
-up with 50% less of the original data information.
+lower size. But when we reduce it this way not necessarily they will share the same timestamps. Imagine you reduce the highest number of timestamps with the lowest and you are using the STOXX600,
+suppose that unluckly there is a null day in each day of the stocks in the STOXX600 but that null day
+is different for each of the stocks, that would mean we would have to remove 600 days in the dataset
+(since the intersection of null days is empty). Now, we initially have around 1200 days, that would
+mean we would end up with 50% less of the original data information.
 
 Solution: we consider and synchronize two securities at the time and compute the covariance and
 the correlation between them. This way we will end up with more information.
@@ -71,7 +70,7 @@ for i in range(size):
         temp_correl = np.round(temp_correl, nb_decimals) 
         mtx_correl[i][j] = temp_correl
         mtx_correl[j][i] = temp_correl
-        if j == 0: # if j = 0 update reuturns (because we don't want to update returs constantly all the time, only once)
+        if j == 0: # if j = 0 update returns (because we don't want to update returns constantly all the time, only once)
             temp_ret = ret_x
         # Mean returns
         temp_mean = np.round(scale*np.mean(temp_ret), nb_decimals) # return is linear in time (brownian motion)
@@ -82,8 +81,7 @@ for i in range(size):
 
 """Note: using range we get n-1 (eg. range 5, we get 1 to 4) this is why we use range(i+1) for j
 because once we have i, we want j to be the same number as i. Eg. i(row)=3 and j(column)=3. If we
-did i until range(size) and j until range(size) we would be computing 2 times the same element since the 
-matrix is symmetric (useless additional computation)""" 
+did i until range(size) and j until range(size) we would be computing 2 times the same element since the matrix is symmetric (useless additional computation)""" 
 # for i in range(5): 
 #     print(i)
 

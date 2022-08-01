@@ -14,11 +14,11 @@ importlib.reload(file_functions)
 
 # Inputs
 inputs = file_classes.option_input()
-inputs.volatility = 0.1442
-inputs.interest_rate = 0.0158
+inputs.volatility = 0.1
+inputs.interest_rate = 0.05
 inputs.maturity = 12/12 
 inputs.strike = 20
-inputs.call_or_put = 'call'
+inputs.call_or_put = 'put'
 
 radius = 0.1 # Note: this allows you to 'zoom' the plot (change the scale)
 inputs.price = np.linspace(1-radius, 1+radius,1000) * inputs.strike # to avoid zeros in the computation

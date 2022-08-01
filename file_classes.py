@@ -552,6 +552,18 @@ class option_input:
         self.strike = None
         self.call_or_put = None 
 
+    def print_inputs(self):
+        print('------')
+        print('Option Inputs')
+        print('Price underlying: ' + str(self.price))
+        print('Starting date (in years): ' + str(self.time))
+        print('Interest rate: ' + str(self.interest_rate))
+        print('Maturity date (in years): ' + str(self.maturity))
+        print('Strike price: ' + str(self.strike))
+        print('Option type: ' + str(self.call_or_put))
+        print('------')
+
+
 class montecarlo_item():
 
     def __init__(self, sim_prices, sim_payoffs, strike, call_or_put):

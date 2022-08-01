@@ -15,8 +15,8 @@ importlib.reload(file_functions)
 # Inputs
 inputs = file_classes.hedge_input()
 inputs.benchmark = 'IMIB.MI'
-inputs.security = 'A2A.MI'
-inputs.hedge_securities = ['AMP.MI', 'ATL.MI']
+inputs.security = 'ISP.MI'
+inputs.hedge_securities = ['EXO.MI', 'ENEL.MI']
 inputs.delta_portfolio = 10 # mln EUR
 
 # Compute hedges

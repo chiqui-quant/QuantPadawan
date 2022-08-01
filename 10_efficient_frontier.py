@@ -32,3 +32,5 @@ include_min_var = False
 
 # Efficient frontier
 dict_portfolios = file_functions.compute_efficient_frontier(rics, notional, target_return, include_min_var)
+
+# dict_portfolio['min-variance'].summary() 
