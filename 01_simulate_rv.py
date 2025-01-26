@@ -3,6 +3,7 @@
 Created on Wed Oct 20 21:12:50 2021
 
 @author: Chiqui
+I will try to change this
 """
 
 import pandas as pd
@@ -18,6 +19,7 @@ df = 5          # degrees of freedom (for student and chi-square distributions)
 dist_name = 'normal' # student, normal, exponential, uniform, chi-square
 dist_type = 'simulated RV' # real, custom
 
+# TODO: add gamma random variable
 if dist_name == 'normal':
     x = np.random.standard_normal(nb_sims)
     x_description = dist_type + ': ' + dist_name
