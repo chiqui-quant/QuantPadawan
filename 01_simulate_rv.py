@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Oct 20 21:12:50 2021
-
-@author: Chiqui
-"""
-
 import pandas as pd
 import numpy as np
 import matplotlib as mpl 
@@ -18,6 +11,7 @@ df = 5          # degrees of freedom (for student and chi-square distributions)
 dist_name = 'normal' # student, normal, exponential, uniform, chi-square
 dist_type = 'simulated RV' # real, custom
 
+# TODO: add gamma distribution
 if dist_name == 'normal':
     x = np.random.standard_normal(nb_sims)
     x_description = dist_type + ': ' + dist_name
